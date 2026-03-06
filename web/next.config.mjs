@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  outputFileTracingExcludes: {
-    '/': ['../2022/Telling_*', '../2018/Telling_*', '../2014/Telling_*'],
+  webpack: (config, { isServer }) => {
+    return config;
   },
+  outputFileTracingIncludes: {
+    '/*': ['../2022/*.xml', '../2018/*.xml', '../2014/*.xml']
+  }
 };
 
 export default nextConfig;
