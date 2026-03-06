@@ -165,17 +165,19 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
               <div className="bg-white rounded-lg border shadow-sm overflow-hidden text-sm">
                 <table className="w-full text-left">
                   <thead className="bg-muted/50 border-b">
-                    <tr className="text-[10px] md:text-xs">
+                    <tr className="text-[10px] md:text-xs text-left">
                       <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground w-8 md:w-10">#</th>
                       <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground">Partij</th>
-                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right">Stemmen</th>
-                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-16 md:w-24">Zetels</th>
-                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-12 md:w-20">+/-</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-16 md:w-24">Zetels '22</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-20 md:w-28">Stemmen '26</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-16 md:w-24">Zetels '26</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-12 md:w-16">+/-</th>
                     </tr>
                   </thead>
                   <tbody>
                     {simulatieResult.partijen.filter(p => p.zetels > 0 || p.stemmen > 0).map((p, i) => {
-                      const oldZetels = selectedGemeente.partijen.find(op => op.id === p.id)?.zetels || 0;
+                      const original = selectedGemeente.partijen.find(op => op.id === p.id);
+                      const oldZetels = original?.zetels || 0;
                       const mutatie = p.zetels - oldZetels;
                       
                       return (
@@ -187,17 +189,19 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
                                <span className="font-medium text-xs md:text-sm truncate">{p.naam}</span>
                              </div>
                           </td>
+                          <td className="py-2.5 px-2 md:px-4 text-right font-medium text-slate-500 text-xs md:text-sm">{oldZetels}</td>
                           <td className="py-2.5 px-2 md:px-4 text-right font-mono tabular-nums text-xs md:text-sm">{p.stemmen.toLocaleString('nl-NL')}</td>
                           <td className="py-2.5 px-2 md:px-4 text-right font-semibold text-xs md:text-sm">
-                            {p.zetels} <span className="text-[9px] md:text-[10px] text-muted-foreground font-normal ml-0.5 md:ml-1">({p.volleZetels}+{p.restZetels})</span>
+                            <span className="text-slate-900">{p.zetels}</span>
+                            <div className="text-[9px] md:text-[10px] text-muted-foreground font-normal">({p.volleZetels}+{p.restZetels})</div>
                           </td>
                           <td className="py-2.5 px-2 md:px-4 text-right tabular-nums text-[10px] md:text-xs">
                              {mutatie > 0 ? (
-                               <span className="text-green-600 font-bold">+{mutatie}</span>
+                               <span className="inline-flex items-center justify-center bg-green-500 text-white font-bold px-1 rounded min-w-[18px]">+{mutatie}</span>
                              ) : mutatie < 0 ? (
-                               <span className="text-red-500 font-bold">{mutatie}</span>
+                               <span className="inline-flex items-center justify-center bg-red-500 text-white font-bold px-1 rounded min-w-[18px]">{mutatie}</span>
                              ) : (
-                               <span className="text-slate-300">-</span>
+                               <span className="text-slate-300 font-bold">=</span>
                              )}
                           </td>
                         </tr>
