@@ -5,9 +5,6 @@ const nextConfig = {
     return config;
   },
   turbopack: {},
-  outputFileTracingIncludes: {
-    '/*': ['../2022/*.xml', '../2018/*.xml', '../2014/*.xml']
-  }
 };
 
 export default nextConfig;
