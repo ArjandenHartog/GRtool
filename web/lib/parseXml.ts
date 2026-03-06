@@ -7,7 +7,7 @@ export type { Gemeente, Partij, RestZetel } from './types';
 export { BESCHIKBARE_JAREN } from './types';
 export type { Jaar } from './types';
 
-const ROOT_DIR = path.join(process.cwd(), '..');
+const ROOT_DIR = path.join(process.cwd(), 'data');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parser = new XMLParser({
