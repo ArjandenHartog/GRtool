@@ -32,38 +32,40 @@ const INDEX: Record<string, number> = {
   'Politieke beweging DENK': 8,
   // 9 – Partij voor de Dieren
   'Partij voor de Dieren': 9,
-  // 10 – SGP
-  'SGP': 10,
-  'Staatkundig Gereformeerde Partij (SGP)': 10,
-  // 11 – ChristenUnie
-  'ChristenUnie': 11,
-  // 12 – Volt
-  'Volt': 12,
-  'Volt Nederland': 12,
-  // 13 – JA21
-  'JA21': 13,
-  'Conservatieve Liberalen': 13,
-  // 14 – Vrede voor Dieren
-  'Vrede voor Dieren': 14,
-  // 15 – BVNL
-  'BVNL': 15,
-  'Belang van Nederland': 15,
-  // 16 – BIJ1
-  'BIJ1': 16,
-  // 17 – LP
-  'LP': 17,
-  'Libertaire Partij': 17,
-  // 18 – 50PLUS
-  '50PLUS': 18,
-  // 19 – Piratenpartij
-  'Piratenpartij': 19,
-  // 20 – Forum voor Democratie
-  'Forum voor Democratie': 20,
-  'FVD': 20,
-  // 21 – Vrij Verbond
-  'Vrij Verbond': 21,
-  // 22 – De Linie
-  'De Linie': 22,
+  // 10 – Forum voor Democratie
+  'Forum voor Democratie': 10,
+  'FVD': 10,
+  // 11 – SGP
+  'SGP': 11,
+  'Staatkundig Gereformeerde Partij (SGP)': 11,
+  // 12 – ChristenUnie
+  'ChristenUnie': 12,
+  // 13 – Volt
+  'Volt': 13,
+  'Volt Nederland': 13,
+  // 14 – JA21
+  'JA21': 14,
+  'Conservatieve Liberalen': 14,
+  // 15 – Vrede voor Dieren
+  'Vrede voor Dieren': 15,
+  // 16 – BVNL
+  'BVNL': 16,
+  'Belang van Nederland': 16,
+  // 17 – BIJ1
+  'BIJ1': 17,
+  // 18 – LP
+  'LP': 18,
+  'Libertaire Partij': 18,
+  // 19 – 50PLUS
+  '50PLUS': 19,
+  // 20 – Piratenpartij
+  'Piratenpartij': 20,
+  // 21 – FP
+  'FP': 21,
+  // 22 – Vrij Verbond
+  'Vrij Verbond': 22,
+  // 23 – De Linie
+  'De Linie': 23,
 };
 
 export function getPartyLogoIndex(naam: string): number | null {
@@ -79,18 +81,18 @@ export function getPartyLogoIndex(naam: string): number | null {
   if (l.includes('socialistische partij') || l.startsWith('sp ') || l === 'sp') return 7;
   if (l === 'denk' || l.includes('beweging denk')) return 8;
   if (l.includes('partij voor de dieren')) return 9;
-  if (l.includes('sgp') || l.includes('staatkundig')) return 10;
-  if (l.includes('christenunie')) return 11;
-  if (l.startsWith('volt')) return 12;
-  if (l.includes('ja21') || l.includes('conservatieve liberalen')) return 13;
-  if (l.includes('vrede voor dieren')) return 14;
-  if (l.includes('bvnl') || l.includes('belang van nederland')) return 15;
-  if (l === 'bij1') return 16;
-  if (l === 'lp' || l.includes('libertaire partij')) return 17;
-  if (l.includes('50plus') || l === '50+') return 18;
-  if (l.includes('piratenpartij')) return 19;
-  if (l.includes('forum voor democratie') || l === 'fvd') return 20;
-  if (l.includes('vrij verbond')) return 21;
-  if (l.includes('de linie')) return 22;
+  if (l.includes('forum voor democratie') || l === 'fvd') return 10;
+  if (l.includes('sgp') || l.includes('staatkundig')) return 11;
+  if (l.includes('christenunie')) return 12;
+  if (l.startsWith('volt')) return 13;
+  if (l.includes('ja21') || l.includes('conservatieve liberalen')) return 14;
+  if (l.includes('vrede voor dieren')) return 15;
+  if (l.includes('bvnl') || l.includes('belang van nederland')) return 16;
+  if (l === 'bij1') return 17;
+  if (l === 'lp' || l.includes('libertaire partij')) return 18;
+  if (l.includes('50plus') || l === '50+') return 19;
+  if (l.includes('piratenpartij')) return 20;
+  if (l.includes('vrij verbond')) return 22;
+  if (l.includes('de linie')) return 23;
   return null;
 }
