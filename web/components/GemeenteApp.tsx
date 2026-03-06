@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Gemeente, Jaar, BESCHIKBARE_JAREN } from '@/lib/types';
@@ -35,7 +35,7 @@ const LEGEND = [
   { naam: 'CDA', kleur: '#84BC3C' },
   { naam: 'SP', kleur: '#CC0000' },
   { naam: 'CU', kleur: '#00A3E0' },
-  { naam: 'SGP', kleur: '#F36D21' },
+  { naam: 'SGP', kleur: '#E95E10' },
   { naam: 'PVV', kleur: '#1C2A4E' },
   { naam: 'FVD', kleur: '#7B2D8B' },
 ];
@@ -56,6 +56,11 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
   const [selected, setSelected] = useState<Gemeente | null>(null);
   const [query, setQuery] = useState('');
   const [mapConfig, setMapConfig] = useState<MapConfig>(DEFAULT_MAP_CONFIG);
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth >= 768) setShowSidebar(true);
+  }, []);
 
   const filtered = query.trim().length > 0
     ? gemeenten.filter((g) => g.naam.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 12)
@@ -67,6 +72,7 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
     const g = gemeenten.find((g) => g.naam === naam) ?? null;
     setSelected(g);
     setQuery('');
+    setShowSidebar(true);
   }
 
   function handleClear() {
@@ -84,6 +90,23 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
 
       {/* Header */}
       <header className="flex items-center gap-3 px-4 h-12 bg-[#1e3a5f] text-white flex-shrink-0">
+        {/* Mobile menu toggle */}
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="md:hidden flex-shrink-0 p-1 rounded hover:bg-white/10"
+          aria-label={showSidebar ? 'Sluit menu' : 'Open menu'}
+        >
+          {showSidebar ? (
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+
         <span className="text-sm font-semibold tracking-tight whitespace-nowrap hidden sm:block flex-shrink-0">
           Gemeenteraadsverkiezingen
         </span>
@@ -122,10 +145,25 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
       </header>
 
       {/* Body */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
+      <div className="flex flex-1 min-h-0 overflow-hidden relative">
+
+        {/* Mobile backdrop */}
+        {showSidebar && (
+          <div
+            className="absolute inset-0 bg-black/40 z-[1999] md:hidden"
+            onClick={() => setShowSidebar(false)}
+          />
+        )}
 
         {/* Sidebar */}
-        <aside className="w-80 flex-shrink-0 flex flex-col border-r bg-background overflow-hidden">
+        <aside className={`
+          absolute md:relative inset-y-0 left-0 z-[2000] md:z-auto
+          w-80 max-w-[85vw] md:max-w-none
+          flex-shrink-0 flex flex-col border-r bg-background overflow-hidden
+          transition-transform duration-300
+          md:!translate-x-0
+          ${showSidebar ? 'translate-x-0' : '-translate-x-full'}
+        `}>
 
           {/* Zoekbalk */}
           <Command shouldFilter={false} className="rounded-none border-0 shadow-none flex-shrink-0 h-auto">

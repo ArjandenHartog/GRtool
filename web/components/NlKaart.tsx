@@ -239,6 +239,16 @@ export default function NlKaart({ gemeenten, jaar, selected, onSelect, mapConfig
         </div>
       )}
       <MapConfigPanel config={mapConfig} onChange={onMapConfigChange} />
+      <button
+        onClick={() => mapRef.current?.setView([52.25, 5.3], 7, { animate: true })}
+        className="absolute bottom-8 right-3 z-[1000] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-lg shadow-md px-2.5 py-2 text-xs font-medium text-slate-700 hover:bg-white hover:text-slate-900 transition-colors flex items-center gap-1.5"
+        title="Terug naar Nederland overzicht"
+      >
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        NL
+      </button>
       <MapContainer
         ref={mapRef}
         center={[52.25, 5.3]}
@@ -246,6 +256,7 @@ export default function NlKaart({ gemeenten, jaar, selected, onSelect, mapConfig
         style={{ height: '100%', width: '100%' }}
         zoomControl
         scrollWheelZoom
+        wheelPxPerZoomLevel={200}
       >
         {tileLayer && (
           <TileLayer
