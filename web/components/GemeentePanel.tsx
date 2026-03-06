@@ -62,7 +62,7 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
       <div className="grid grid-cols-3 gap-2">
         <StatCard label="raadszetels" value={gemeente.totaalZetels} />
         <StatCard label="partijen" value={gemeente.aantalPartijen} />
-        <StatCard label="volle zetels" value={gemeente.totaalVolleZetels} sub={`${gemeente.totaalRestZetels} restzetels`} />
+        <StatCard label="volle zetels" value={gemeente.totaalVolleZetels} sub={gemeente.totaalStemmen > 0 ? `${gemeente.totaalRestZetels} restzetels` : 'onbekend'} />
       </div>
 
       {/* Geslachtsverhouding */}
@@ -253,7 +253,7 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
           Gekozen raadsleden
         </p>
         <div className="space-y-1.5">
-          {gemeente.partijen.map((p: Partij) => {
+          {gemeente.partijen.filter(p => p.zetels > 0).map((p: Partij) => {
             const color = getPartyColor(p.naam);
             return (
               <details key={p.id} className="group">

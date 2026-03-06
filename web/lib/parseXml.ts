@@ -283,8 +283,8 @@ function parseFile(filePath: string): Gemeente | null {
   }
 
   const partijenArray = [...partijen.values()]
-    .filter((p) => p.zetels > 0)
-    .sort((a, b) => b.zetels - a.zetels || a.naam.localeCompare(b.naam));
+    .filter((p) => p.zetels > 0 || p.stemmen > 0)
+    .sort((a, b) => b.zetels - a.zetels || b.stemmen - a.stemmen || a.naam.localeCompare(b.naam));
 
   const totaalZetels = partijenArray.reduce((s, p) => s + p.zetels, 0);
   const totaalVolleZetels = partijenArray.reduce((s, p) => s + p.volleZetels, 0);
