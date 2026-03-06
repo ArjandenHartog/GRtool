@@ -1,9 +1,9 @@
 import { XMLParser } from 'fast-xml-parser';
 import fs from 'fs';
 import path from 'path';
-import type { Gemeente, Partij } from './types';
+import { Gemeente, Partij, RestZetel } from './types';
 
-export type { Gemeente, Partij } from './types';
+export type { Gemeente, Partij, RestZetel } from './types';
 export { BESCHIKBARE_JAREN } from './types';
 export type { Jaar } from './types';
 
@@ -147,6 +147,7 @@ function parseFile(filePath: string): Gemeente | null {
 
   let totaalStemmen = 0;
   let kiesdeler = 0;
+  const restzetelLog: RestZetel[] = [];
 
   try {
     const fsHidden = eval('require("fs")');
@@ -218,6 +219,12 @@ function parseFile(filePath: string): Gemeente | null {
           if (bestP) {
             bestP._zetelsCalculated++;
             bestP.restZetels++;
+            restzetelLog.push({
+              nummer: restzetelLog.length + 1,
+              ronde: 'gemiddelden',
+              partij: bestP.naam,
+              maat: maxAvg,
+            });
           }
         }
       } else {
@@ -234,6 +241,12 @@ function parseFile(filePath: string): Gemeente | null {
           c.p.restZetels++;
           toesgewezen++;
           metRest.add(c.p.id);
+          restzetelLog.push({
+            nummer: restzetelLog.length + 1,
+            ronde: 'overschot',
+            partij: c.p.naam,
+            maat: c.overschot,
+          });
         }
         
         const nogTeVerdelen = restant - toesgewezen;
@@ -250,6 +263,12 @@ function parseFile(filePath: string): Gemeente | null {
             bestP.restZetels++;
             bestP._restGemiddelden = true;
             metRest.add(bestP.id);
+            restzetelLog.push({
+              nummer: restzetelLog.length + 1,
+              ronde: 'gemiddelden',
+              partij: bestP.naam,
+              maat: maxAvg,
+            });
           }
         }
       }
@@ -288,5 +307,6 @@ function parseFile(filePath: string): Gemeente | null {
     grootstePartij: partijenArray[0]?.naam ?? '',
     grootstePartijZetels: partijenArray[0]?.zetels ?? 0,
     makkelijkeZetelPartijen,
+    restzetelLog,
   };
 }

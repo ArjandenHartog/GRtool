@@ -22,6 +22,13 @@ export interface Partij {
   kandidaten: Kandidaat[];
 }
 
+export interface RestZetel {
+  nummer: number;
+  ronde: string;
+  partij: string;
+  maat: number;
+}
+
 export interface Gemeente {
   naam: string;
   cbsCode: string;
@@ -36,4 +43,5 @@ export interface Gemeente {
   grootstePartij: string;
   grootstePartijZetels: number;
   makkelijkeZetelPartijen: string[];
+  restzetelLog: RestZetel[];
 }

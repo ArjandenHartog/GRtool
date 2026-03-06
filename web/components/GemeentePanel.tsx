@@ -115,6 +115,9 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
                   )}
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0 text-[11px] tabular-nums">
+                  <span className="text-muted-foreground mr-1 text-[10px] hidden sm:inline-block">
+                    {p.stemmen.toLocaleString('nl-NL')} ({(p.stemmen / gemeente.totaalStemmen * 100).toFixed(1)}%)
+                  </span>
                   {p.volleZetels > 0 && (
                     <span className="text-foreground font-semibold">{p.volleZetels}v</span>
                   )}
@@ -139,20 +142,38 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
                   />
                 )}
               </div>
+
+              {/* Stemmen tekst op mobiel waar het anders niet past */}
+              <div className="text-[10px] text-muted-foreground mt-0.5 sm:hidden">
+                {p.stemmen.toLocaleString('nl-NL')} stemmen ({(p.stemmen / gemeente.totaalStemmen * 100).toFixed(1)}%)
+              </div>
             </div>
           );
         })}
 
-        {/* Legenda balk */}
-        <div className="flex items-center gap-3 text-[10px] text-muted-foreground pt-1">
-          <span className="flex items-center gap-1">
-            <span className="w-3 h-1.5 rounded-sm bg-slate-400 inline-block" />
-            vol = volle zetel
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-3 h-1.5 rounded-sm bg-slate-400/50 inline-block" />
-            r = restzetel
-          </span>
+        {/* Legenda en Totaal Info */}
+        <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <span className="w-3 h-1.5 rounded-sm bg-slate-400 inline-block" />
+              vol = volle zetel
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-3 h-1.5 rounded-sm bg-slate-400/50 inline-block" />
+              r = restzetel
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-0.5 text-[11px] text-muted-foreground bg-muted/20 p-2 rounded border mt-2">
+          <div className="flex justify-between">
+            <span>Totale stemmen:</span>
+            <span className="font-semibold tabular-nums text-foreground">{gemeente.totaalStemmen?.toLocaleString('nl-NL')}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Kiesdeler:</span>
+            <span className="font-semibold tabular-nums text-foreground">{Math.floor(gemeente.kiesdeler ?? 0).toLocaleString('nl-NL')} <span className="text-[10px] font-normal text-muted-foreground">stemmen/zetel</span></span>
+          </div>
         </div>
       </div>
 
@@ -183,6 +204,43 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
                 );
               })}
             </div>
+          </div>
+        </>
+      )}
+
+      {/* ── Volgorde toekenning restzetels ────────────────── */}
+      {gemeente.restzetelLog && gemeente.restzetelLog.length > 0 && (
+        <>
+          <Separator />
+          <div className="space-y-2">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+              Volgorde toekenning restzetels
+            </p>
+            <div className="space-y-1">
+              {gemeente.restzetelLog.map((log) => {
+                const isOverschot = log.ronde === 'overschot';
+                const label = isOverschot ? 'overschot' : 'gemiddelde';
+                return (
+                  <div key={log.nummer} className="flex items-center gap-2 text-[11px] bg-muted/30 px-2 py-1.5 rounded">
+                    <span className="font-bold text-muted-foreground w-4 text-right flex-shrink-0">{log.nummer}.</span>
+                    <span className="font-medium truncate flex-1" title={log.partij}>{log.partij}</span>
+                    <span className="text-muted-foreground truncate w-24 text-right flex-shrink-0" title={`${label}: ${log.maat.toFixed(1)}`}>
+                      {isOverschot ? 'ov:' : 'gem:'} <span className="tabular-nums font-mono text-foreground">{log.maat.toLocaleString('nl-NL', { maximumFractionDigits: 1, minimumFractionDigits: 1 })}</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            {gemeente.totaalZetels < 19 && (
+              <div className="text-[10px] text-muted-foreground italic leading-tight mt-1">
+                Omdat {gemeente.naam} minder dan 19 zetels heeft, worden eerst de grootste overschotten bekeken (mits drempel gehaald), en pas daarna gemiddelden.
+              </div>
+            )}
+            {gemeente.totaalZetels >= 19 && (
+              <div className="text-[10px] text-muted-foreground italic leading-tight mt-1">
+                Op basis van het stelsel van grootste gemiddelden.
+              </div>
+            )}
           </div>
         </>
       )}
