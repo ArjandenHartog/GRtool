@@ -135,7 +135,7 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
         </Badge>
         <span className="text-[11px] text-blue-300 flex-shrink-0">{JAAR_DATUM[jaar]}</span>
 
-        <div className="flex items-center gap-3 overflow-x-auto flex-1 min-w-0 ml-1">
+        <div className="hidden sm:flex items-center gap-3 overflow-x-auto flex-1 min-w-0 ml-1">
           {LEGEND.map((item) => (
             <span key={item.naam} className="flex items-center gap-1 text-[11px] text-blue-100 whitespace-nowrap">
               <span className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: item.kleur }} />
@@ -147,7 +147,7 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
         <Separator orientation="vertical" className="h-4 bg-white/20 flex-shrink-0 hidden sm:block" />
         <button
           onClick={() => router.push('/simulatie')}
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded bg-orange-500 hover:bg-orange-400 text-white transition-colors shadow-sm ml-2 flex-shrink-0"
+          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded bg-orange-500 hover:bg-orange-400 text-white transition-colors shadow-sm ml-auto sm:ml-2 flex-shrink-0"
         >
           <span>Simulatie 2026</span>
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
