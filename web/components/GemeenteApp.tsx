@@ -133,9 +133,9 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
         <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal bg-white/10 text-blue-100 border-0 flex-shrink-0">
           {gemeenten.length}
         </Badge>
-        <span className="text-[11px] text-blue-300 flex-shrink-0">{JAAR_DATUM[jaar]}</span>
+        <span className="text-[11px] text-blue-300 flex-shrink-0 hidden lg:block">{JAAR_DATUM[jaar]}</span>
 
-        <div className="hidden sm:flex items-center gap-3 overflow-x-auto flex-1 min-w-0 ml-1">
+        <div className="hidden xl:flex items-center gap-3 overflow-x-auto flex-1 min-w-0 ml-1">
           {LEGEND.map((item) => (
             <span key={item.naam} className="flex items-center gap-1 text-[11px] text-blue-100 whitespace-nowrap">
               <span className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: item.kleur }} />
@@ -144,26 +144,29 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
           ))}
         </div>
         
-        <Separator orientation="vertical" className="h-4 bg-white/20 flex-shrink-0 hidden sm:block" />
-        <button
-          onClick={() => router.push('/simulatie')}
-          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded bg-orange-500 hover:bg-orange-400 text-white transition-colors shadow-sm ml-auto sm:ml-2 flex-shrink-0"
-        >
-          <span>Simulatie</span>
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+        <Separator orientation="vertical" className="h-4 bg-white/20 flex-shrink-0 hidden md:block" />
+        
+        <div className="flex items-center gap-1 ml-auto">
+          <button
+            onClick={() => router.push('/simulatie')}
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-semibold rounded bg-orange-600 hover:bg-orange-500 text-white transition-colors shadow-sm flex-shrink-0"
+          >
+            <span className="hidden xs:inline">Simulatie</span>
+            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
 
-        <button
-          onClick={() => router.push('/prognose')}
-          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded bg-blue-600 hover:bg-blue-500 text-white transition-colors shadow-sm ml-1 flex-shrink-0"
-        >
-          <span>Prognose</span>
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-        </button>
+          <button
+            onClick={() => router.push('/prognose')}
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-semibold rounded bg-blue-600 hover:bg-blue-500 text-white transition-colors shadow-sm flex-shrink-0"
+          >
+            <span className="hidden xs:inline">Prognose</span>
+            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+          </button>
+        </div>
       </header>
 
       {/* Body */}
