@@ -149,9 +149,19 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
           onClick={() => router.push('/simulatie')}
           className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded bg-orange-500 hover:bg-orange-400 text-white transition-colors shadow-sm ml-auto sm:ml-2 flex-shrink-0"
         >
-          <span>Simulatie 2026</span>
+          <span>Simulatie</span>
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <button
+          onClick={() => router.push('/prognose')}
+          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded bg-blue-600 hover:bg-blue-500 text-white transition-colors shadow-sm ml-1 flex-shrink-0"
+        >
+          <span>Prognose</span>
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
           </svg>
         </button>
       </header>
