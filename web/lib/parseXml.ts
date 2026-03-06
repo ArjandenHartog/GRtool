@@ -88,6 +88,7 @@ function parseFile(filePath: string): Gemeente | null {
         partijen.set(currentPartijId, {
           id: currentPartijId,
           naam: partijNaam,
+          stemmen: 0,
           zetels: 0,
           volleZetels: 0,
           restZetels: 0,
@@ -128,8 +129,6 @@ function parseFile(filePath: string): Gemeente | null {
 
       const ranking = Number(sel.Ranking) || 1;
       partij.zetels++;
-      if (ranking === 1) partij.volleZetels++;
-      else partij.restZetels++;
 
       const localityName = sel.Candidate?.QualifyingAddress?.['xal:Locality']?.['xal:LocalityName'];
       const woonplaats = localityName ? String(localityName) : undefined;
@@ -146,9 +145,122 @@ function parseFile(filePath: string): Gemeente | null {
     }
   }
 
+  let totaalStemmen = 0;
+  let kiesdeler = 0;
+
+  try {
+    const fsHidden = eval('require("fs")');
+    const parsedPath = path.parse(filePath);
+    const parts = parsedPath.base.split('_');
+    parts[0] = 'Telling';
+    const tellingPath = parsedPath.dir + path.sep + parts.join('_');
+    if (fsHidden.existsSync(tellingPath)) {
+      const tellingXml = fsHidden.readFileSync(tellingPath, 'utf-8');
+      const tellingDoc: any = parser.parse(tellingXml);
+      const totalVotesObj = tellingDoc?.EML?.Count?.Election?.Contests?.Contest?.TotalVotes;
+      if (totalVotesObj) {
+        totaalStemmen = Number(totalVotesObj.TotalCounted) || 0;
+        const selections = Array.isArray(totalVotesObj.Selection) 
+          ? totalVotesObj.Selection 
+          : totalVotesObj.Selection ? [totalVotesObj.Selection] : [];
+        for (const sel of selections) {
+          if (sel.AffiliationIdentifier) {
+            const pid = String(sel.AffiliationIdentifier['@_Id'] ?? '');
+            if (partijen.has(pid)) {
+              partijen.get(pid)!.stemmen = Number(sel.ValidVotes) || 0;
+            } else {
+              // Ook partijen die niet verkozen zijn maar wel stemmen kregen meenemen
+              partijen.set(pid, {
+                id: pid,
+                naam: String(sel.AffiliationIdentifier.RegisteredName ?? ''),
+                stemmen: Number(sel.ValidVotes) || 0,
+                zetels: 0,
+                volleZetels: 0,
+                restZetels: 0,
+                isMakkelijkeZetel: false,
+                kandidaten: [],
+              });
+            }
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.error(`Fout bij parsen Telling voor ${naam}:`, e);
+  }
+
+  const actuelePartijen = [...partijen.values()].filter(p => p.stemmen > 0 || p.zetels > 0);
+  const totaalZetelsOorspronkelijk = actuelePartijen.reduce((s, p) => s + p.zetels, 0);
+
+  if (totaalZetelsOorspronkelijk > 0 && totaalStemmen > 0) {
+    kiesdeler = totaalStemmen / totaalZetelsOorspronkelijk;
+    let restant = totaalZetelsOorspronkelijk;
+    
+    // Stap 1: Volle zetels
+    for (const p of actuelePartijen) {
+      p.volleZetels = Math.floor(p.stemmen / kiesdeler);
+      p.restZetels = 0;
+      (p as any)._zetelsCalculated = p.volleZetels;
+      (p as any)._restGemiddelden = false;
+      restant -= p.volleZetels;
+    }
+
+    // Stap 2: Restzetels verdelen
+    if (restant > 0) {
+      if (totaalZetelsOorspronkelijk >= 19) {
+        for (let i = 0; i < restant; i++) {
+          let maxAvg = -1;
+          let bestP: any = null;
+          for (const p of actuelePartijen) {
+            const avg = p.stemmen / ((p as any)._zetelsCalculated + 1);
+            if (avg > maxAvg) { maxAvg = avg; bestP = p; }
+          }
+          if (bestP) {
+            bestP._zetelsCalculated++;
+            bestP.restZetels++;
+          }
+        }
+      } else {
+        const cands = actuelePartijen
+          .filter(p => p.stemmen >= 0.75 * kiesdeler)
+          .map(p => ({ p, overschot: p.stemmen - (p.volleZetels * kiesdeler) }))
+          .sort((a, b) => b.overschot - a.overschot);
+        let toesgewezen = 0;
+        const metRest = new Set<string>();
+        
+        for (const c of cands) {
+          if (toesgewezen >= restant) break;
+          (c.p as any)._zetelsCalculated++;
+          c.p.restZetels++;
+          toesgewezen++;
+          metRest.add(c.p.id);
+        }
+        
+        const nogTeVerdelen = restant - toesgewezen;
+        for (let i = 0; i < nogTeVerdelen; i++) {
+          let maxAvg = -1;
+          let bestP: any = null;
+          for (const p of actuelePartijen) {
+            if ((p as any)._restGemiddelden) continue;
+            const avg = p.stemmen / ((p as any)._zetelsCalculated + 1);
+            if (avg > maxAvg) { maxAvg = avg; bestP = p; }
+          }
+          if (bestP) {
+            bestP._zetelsCalculated++;
+            bestP.restZetels++;
+            bestP._restGemiddelden = true;
+            metRest.add(bestP.id);
+          }
+        }
+      }
+    }
+  }
+
   for (const p of partijen.values()) {
     p.kandidaten.sort((a, b) => a.ranking - b.ranking);
     p.isMakkelijkeZetel = p.volleZetels === 0 && p.restZetels === 1;
+    delete (p as any)._zetelsCalculated;
+    delete (p as any)._restGemiddelden;
   }
 
   const partijenArray = [...partijen.values()]
@@ -167,6 +279,8 @@ function parseFile(filePath: string): Gemeente | null {
     cbsCode,
     cbsCodeFormatted: `GM${cbsCode.padStart(4, '0')}`,
     partijen: partijenArray,
+    kiesdeler,
+    totaalStemmen,
     totaalZetels,
     totaalVolleZetels,
     totaalRestZetels,

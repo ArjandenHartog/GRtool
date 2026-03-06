@@ -14,6 +14,7 @@ export interface Kandidaat {
 export interface Partij {
   id: string;
   naam: string;
+  stemmen: number;
   zetels: number;
   volleZetels: number;
   restZetels: number;
@@ -26,6 +27,8 @@ export interface Gemeente {
   cbsCode: string;
   cbsCodeFormatted: string;
   partijen: Partij[];
+  kiesdeler: number;
+  totaalStemmen: number;
   totaalZetels: number;
   totaalVolleZetels: number;
   totaalRestZetels: number;
