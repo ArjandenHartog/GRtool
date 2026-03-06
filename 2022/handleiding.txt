@@ -1,0 +1,26 @@
+Handleiding zetelberekening gemeenteraadsverkiezingen 2022
+
+1: open het bestand zetels_GR2022.py in een editor en vul de bestandslocatie van de map in bovenaan het script en sla daarna het script op
+2: je kunt nu het script gebruiken. 
+
+functies
+
+plaats:
+- vul de volledige plaatsnaam van een gemeente in om een overzicht van de stemmen, zetelverdeling en restzetelverdeling te krijgen
+- let op! werkt alleen met de volledige, officiële naam van een gemeente, zonder spaties of leestekens.
+- bijvoorbeeld aaenhunze, shertogenbosch, krimpenaandenijssel etc
+- de gemeente bergen bestaat twee keer: bergen_l voor bergen in limburg en bergen_nh voor bergen in noord-holland
+- in enkele gemeenten werden er in 2022 geen verkiezingen gehouden, hiervoor zijn dus ook geen resultaten beschikbaar
+
+tabel gemeenteraadszetels:
+- vul "tabel gemeenteraadszetels" in om een lijst te krijgen van de grote van elke gemeenteraad
+
+makkelijke zetels: 
+- vul "makkelijke zetels" in om deze functie te starten
+- dit is een functie die zoekt naar partijen die in de gemeenteraad enkel 1 restzetel hebben gehaald, een zogenaamde makkelijke zetel
+- vul een partijnaam in om te kijken hoeveel makkelijke zetels een bepaalde partij in Nederland heeft gekregen
+- vul "alle" in om de complete lijst van makkelijke zetels te krijgen
+
+stop:
+- stopt het script
+
