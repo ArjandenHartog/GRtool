@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Gemeente, Jaar, BESCHIKBARE_JAREN } from '@/lib/types';
+import { type MapConfig, DEFAULT_MAP_CONFIG } from '@/lib/mapConfig';
 import { getPartyColor } from '@/lib/partijKleuren';
 import {
   Command,
@@ -54,6 +55,7 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
   const router = useRouter();
   const [selected, setSelected] = useState<Gemeente | null>(null);
   const [query, setQuery] = useState('');
+  const [mapConfig, setMapConfig] = useState<MapConfig>(DEFAULT_MAP_CONFIG);
 
   const filtered = query.trim().length > 0
     ? gemeenten.filter((g) => g.naam.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 12)
@@ -204,8 +206,11 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
           <NlKaart
             key={jaar}
             gemeenten={gemeenten}
+            jaar={jaar}
             selected={selected?.naam ?? null}
             onSelect={handleSelect}
+            mapConfig={mapConfig}
+            onMapConfigChange={setMapConfig}
           />
         </main>
       </div>
