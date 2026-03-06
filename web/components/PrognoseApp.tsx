@@ -5,6 +5,14 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Gemeente, Partij } from '@/lib/types';
 import { berekenZetels } from '@/lib/zetelVerdeling';
 import { getPartyColor } from '@/lib/partijKleuren';
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandGroup,
+  CommandEmpty,
+} from '@/components/ui/command';
 import PartyLogo from './PartyLogo';
 
 interface TkResult {
@@ -22,6 +30,7 @@ function PrognoseContent({ gemeenten }: { gemeenten: Gemeente[] }) {
   const [tk2023, setTk2023] = useState<TkResult[]>([]);
   const [tk2025, setTk2025] = useState<TkResult[]>([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
 
   // Initial load and URL sync
   useEffect(() => {
@@ -149,20 +158,33 @@ function PrognoseContent({ gemeenten }: { gemeenten: Gemeente[] }) {
           ${selectedGemeente ? '-translate-x-full md:translate-x-0' : 'translate-x-0'}
         `}>
           <div className="p-4 border-b">
-            <label htmlFor="search" className="text-sm font-medium leading-none">
-              Selecteer Gemeente
+            <label className="text-sm font-medium leading-none mb-2 block">
+              Gemeente zoeken
             </label>
-            <select
-              id="search"
-              className="w-full mt-1.5 p-2 rounded-md border bg-background text-sm"
-              value={selectedGemeente?.naam ?? ''}
-              onChange={(e) => handleSelect(e.target.value)}
-            >
-              <option value="">-- Kies een gemeente --</option>
-              {gemeenten.map((g) => (
-                <option key={g.cbsCode} value={g.naam}>{g.naam}</option>
-              ))}
-            </select>
+            <Command className="rounded-md border shadow-sm">
+              <CommandInput 
+                placeholder="Typ gemeentenaam..." 
+                value={query}
+                onValueChange={setQuery}
+                className="h-9"
+              />
+              <CommandList className="max-h-[300px] overflow-y-auto">
+                <CommandGroup>
+                  {gemeenten
+                    .filter(g => g.naam.toLowerCase().includes(query.toLowerCase()))
+                    .map((g) => (
+                      <CommandItem
+                        key={g.cbsCode}
+                        value={g.naam}
+                        onSelect={() => handleSelect(g.naam)}
+                        className="cursor-pointer"
+                      >
+                        {g.naam}
+                      </CommandItem>
+                    ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4">

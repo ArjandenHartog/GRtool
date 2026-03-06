@@ -5,11 +5,20 @@ import Link from 'next/link';
 import { Gemeente, Partij } from '@/lib/types';
 import { berekenZetels } from '@/lib/zetelVerdeling';
 import { getPartyColor } from '@/lib/partijKleuren';
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandGroup,
+  CommandEmpty,
+} from '@/components/ui/command';
 import PartyLogo from './PartyLogo';
 
 export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
   const [selectedGemeente, setSelectedGemeente] = useState<Gemeente | null>(null);
   const [stemmenInput, setStemmenInput] = useState<Record<string, number>>({});
+  const [query, setQuery] = useState('');
 
   const handleSelect = (gemeenteNaam: string) => {
     const g = gemeenten.find((g) => g.naam === gemeenteNaam);
@@ -67,20 +76,34 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
           ${selectedGemeente ? '-translate-x-full md:translate-x-0' : 'translate-x-0'}
         `}>
           <div className="p-4 border-b">
-            <label htmlFor="search" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label className="text-sm font-medium leading-none mb-2 block">
               Kies Gemeente
             </label>
-            <select
-              id="search"
-              className="w-full mt-1.5 p-2 rounded-md border bg-background text-sm"
-              value={selectedGemeente?.naam ?? ''}
-              onChange={(e) => handleSelect(e.target.value)}
-            >
-              <option value="">-- Selecteer --</option>
-              {gemeenten.map((g) => (
-                <option key={g.cbsCode} value={g.naam}>{g.naam}</option>
-              ))}
-            </select>
+            <Command className="rounded-md border shadow-sm">
+              <CommandInput 
+                placeholder="Typ gemeentenaam..." 
+                value={query}
+                onValueChange={setQuery}
+                className="h-9"
+              />
+              <CommandList className="max-h-[300px] overflow-y-auto">
+                <CommandEmpty>Geen resultaat.</CommandEmpty>
+                <CommandGroup>
+                  {gemeenten
+                    .filter(g => g.naam.toLowerCase().includes(query.toLowerCase()))
+                    .map((g) => (
+                      <CommandItem
+                        key={g.cbsCode}
+                        value={g.naam}
+                        onSelect={() => handleSelect(g.naam)}
+                        className="cursor-pointer"
+                      >
+                        {g.naam}
+                      </CommandItem>
+                    ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
