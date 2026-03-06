@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { Gemeente, Partij, RestZetel } from '../lib/types';
 
-const ROOT_DIR = path.join(process.cwd(), 'data');
+const ROOT_DIR = path.join(process.cwd(), '..');
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
