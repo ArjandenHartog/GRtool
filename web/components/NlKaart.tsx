@@ -149,7 +149,6 @@ export default function NlKaart({ gemeenten, selected, onSelect }: Props) {
           <GeoJSON
             key={gemeenten.length}
             data={geoData}
-            // @ts-expect-error loose typing
             style={styleFeature}
             onEachFeature={onEachFeature}
           />
