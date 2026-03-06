@@ -280,26 +280,29 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
                   </svg>
                 </summary>
                 <ul className="mt-1 space-y-0.5 ml-4.5">
-                  {p.kandidaten.map((k, i) => (
-                    <li key={i} className="flex items-center gap-1.5 text-[11px] py-0.5">
-                      <span className="w-4 text-center text-[10px] text-muted-foreground flex-shrink-0">
-                        {i + 1}.
-                      </span>
-                      <span className={k.ranking === 2 ? 'text-orange-600 font-medium' : 'text-foreground'}>
-                        {k.naam}
-                      </span>
-                      {k.geslacht === 'female' && <span className="text-pink-400 text-[10px]">v</span>}
-                      {k.geslacht === 'male' && <span className="text-blue-400 text-[10px]">m</span>}
-                      {k.woonplaats && (
-                        <span className="ml-auto text-[10px] text-muted-foreground/60 truncate max-w-[80px] flex-shrink-0" title={k.woonplaats}>
-                          {k.woonplaats}
+                  {p.kandidaten.map((k, i) => {
+                    const isRest = i >= p.volleZetels;
+                    return (
+                      <li key={i} className="flex items-center gap-1.5 text-[11px] py-0.5">
+                        <span className="w-4 text-center text-[10px] text-muted-foreground flex-shrink-0">
+                          {i + 1}.
                         </span>
-                      )}
-                      {k.ranking === 2 && (
-                        <span className="text-[9px] text-orange-400 font-medium flex-shrink-0">rest</span>
-                      )}
-                    </li>
-                  ))}
+                        <span className={isRest ? 'text-orange-600 font-medium' : 'text-foreground'}>
+                          {k.naam}
+                        </span>
+                        {k.geslacht === 'female' && <span className="text-pink-400 text-[10px]">v</span>}
+                        {k.geslacht === 'male' && <span className="text-blue-400 text-[10px]">m</span>}
+                        {k.woonplaats && (
+                          <span className="ml-auto text-[10px] text-muted-foreground/60 truncate max-w-[80px] flex-shrink-0" title={k.woonplaats}>
+                            {k.woonplaats}
+                          </span>
+                        )}
+                        {isRest && (
+                          <span className="text-[9px] text-orange-400 font-medium flex-shrink-0">rest</span>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </details>
             );
