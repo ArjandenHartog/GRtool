@@ -4,6 +4,7 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     return config;
   },
+  turbopack: {},
   outputFileTracingIncludes: {
     '/*': ['../2022/*.xml', '../2018/*.xml', '../2014/*.xml']
   }
