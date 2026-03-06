@@ -56,9 +56,16 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
         <span className="text-sm font-medium">Uitslagenavond 2026 Simulatie</span>
       </header>
 
-      <div className="flex flex-1 min-h-0 overflow-hidden">
+      <div className="flex flex-1 min-h-0 overflow-hidden relative">
         {/* Sidebar */}
-        <aside className="w-80 border-r bg-muted/20 flex flex-col h-full overflow-hidden">
+        <aside className={`
+          absolute md:relative inset-y-0 left-0 z-[2000] md:z-auto
+          w-80 max-w-[85vw] md:max-w-none
+          flex-shrink-0 flex flex-col border-r bg-background overflow-hidden
+          transition-transform duration-300
+          md:!translate-x-0
+          ${selectedGemeente ? '-translate-x-full md:translate-x-0' : 'translate-x-0'}
+        `}>
           <div className="p-4 border-b">
             <label htmlFor="search" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Kies Gemeente
@@ -113,7 +120,15 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
         </aside>
 
         {/* Hoofdscherm (Resultaat) */}
-        <main className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
+        <main className="flex-1 overflow-y-auto p-3 md:p-6 bg-slate-50/50">
+          {selectedGemeente && (
+            <button 
+              onClick={() => setSelectedGemeente(null)}
+              className="md:hidden flex items-center gap-1 text-xs font-bold text-orange-600 mb-4 bg-white px-3 py-2 rounded border shadow-sm"
+            >
+              &larr; Andere gemeente kiezen / Stemmen aanpassen
+            </button>
+          )}
           {selectedGemeente && simulatieResult ? (
             <div className="max-w-3xl mx-auto space-y-6">
               
@@ -127,12 +142,12 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
               <div className="bg-white rounded-lg border shadow-sm overflow-hidden text-sm">
                 <table className="w-full text-left">
                   <thead className="bg-muted/50 border-b">
-                    <tr>
-                      <th className="py-2.5 px-4 font-semibold text-muted-foreground w-10">#</th>
-                      <th className="py-2.5 px-4 font-semibold text-muted-foreground">Partij</th>
-                      <th className="py-2.5 px-4 font-semibold text-muted-foreground text-right">Stemmen</th>
-                      <th className="py-2.5 px-4 font-semibold text-muted-foreground text-right w-24">Zetels (Vol + Rest)</th>
-                      <th className="py-2.5 px-4 font-semibold text-muted-foreground text-right text-[11px] w-20">Verschil '22</th>
+                    <tr className="text-[10px] md:text-xs">
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground w-8 md:w-10">#</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground">Partij</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right">Stemmen</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-16 md:w-24">Zetels</th>
+                      <th className="py-2.5 px-2 md:px-4 font-semibold text-muted-foreground text-right w-12 md:w-20">+/-</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -142,18 +157,18 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
                       
                       return (
                         <tr key={p.id} className="border-b last:border-0 hover:bg-muted/20">
-                          <td className="py-2.5 px-4 text-muted-foreground">{i + 1}</td>
-                          <td className="py-2.5 px-4">
+                          <td className="py-2.5 px-2 md:px-4 text-muted-foreground text-xs">{i + 1}</td>
+                          <td className="py-2.5 px-2 md:px-4">
                              <div className="flex items-center gap-2">
-                               <PartyLogo naam={p.naam} size={20} fallbackColor={getPartyColor(p.naam)} />
-                               <span className="font-medium">{p.naam}</span>
+                               <PartyLogo naam={p.naam} size={16} fallbackColor={getPartyColor(p.naam)} />
+                               <span className="font-medium text-xs md:text-sm truncate">{p.naam}</span>
                              </div>
                           </td>
-                          <td className="py-2.5 px-4 text-right font-mono tabular-nums">{p.stemmen.toLocaleString('nl-NL')}</td>
-                          <td className="py-2.5 px-4 text-right font-semibold">
-                            {p.zetels} <span className="text-[10px] text-muted-foreground font-normal ml-1">({p.volleZetels} + {p.restZetels})</span>
+                          <td className="py-2.5 px-2 md:px-4 text-right font-mono tabular-nums text-xs md:text-sm">{p.stemmen.toLocaleString('nl-NL')}</td>
+                          <td className="py-2.5 px-2 md:px-4 text-right font-semibold text-xs md:text-sm">
+                            {p.zetels} <span className="text-[9px] md:text-[10px] text-muted-foreground font-normal ml-0.5 md:ml-1">({p.volleZetels}+{p.restZetels})</span>
                           </td>
-                          <td className="py-2.5 px-4 text-right tabular-nums text-xs">
+                          <td className="py-2.5 px-2 md:px-4 text-right tabular-nums text-[10px] md:text-xs">
                              {mutatie > 0 ? (
                                <span className="text-green-600 font-bold">+{mutatie}</span>
                              ) : mutatie < 0 ? (

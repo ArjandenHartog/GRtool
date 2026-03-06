@@ -139,8 +139,15 @@ function PrognoseContent({ gemeenten }: { gemeenten: Gemeente[] }) {
         </div>
       </header>
 
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        <aside className="w-80 border-r bg-muted/20 flex flex-col h-full overflow-hidden">
+      <div className="flex flex-1 min-h-0 overflow-hidden relative">
+        <aside className={`
+          absolute md:relative inset-y-0 left-0 z-[2000] md:z-auto
+          w-80 max-w-[85vw] md:max-w-none
+          flex-shrink-0 flex flex-col border-r bg-background overflow-hidden
+          transition-transform duration-300
+          md:!translate-x-0
+          ${selectedGemeente ? '-translate-x-full md:translate-x-0' : 'translate-x-0'}
+        `}>
           <div className="p-4 border-b">
             <label htmlFor="search" className="text-sm font-medium leading-none">
               Selecteer Gemeente
@@ -180,85 +187,104 @@ function PrognoseContent({ gemeenten }: { gemeenten: Gemeente[] }) {
           </div>
         </aside>
 
-        <main className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
+        <main className="flex-1 overflow-y-auto p-3 md:p-6 bg-slate-50/50">
+          {selectedGemeente && (
+            <button 
+              onClick={() => setSelectedGemeente(null)}
+              className="md:hidden flex items-center gap-1 text-xs font-bold text-blue-600 mb-4 bg-white px-3 py-2 rounded border shadow-sm"
+            >
+              &larr; Andere gemeente kiezen
+            </button>
+          )}
           {selectedGemeente && prognose ? (
-            <div className="max-w-5xl mx-auto space-y-6">
-              <div className="bg-white rounded-lg border shadow-sm p-6">
-                 <h2 className="text-2xl font-bold">{selectedGemeente.naam} - Prognose GR 2026</h2>
-                 <p className="text-sm text-muted-foreground mt-1">
-                   Gedetailleerd overzicht van GR22, landelijke verschuivingen (TK23/TK25) en de prognose voor '26
+            <div className="max-w-5xl mx-auto space-y-4 md:space-y-6">
+              <div className="bg-white rounded-lg border shadow-sm p-4 md:p-6">
+                 <h2 className="text-xl md:text-2xl font-bold leading-tight">{selectedGemeente.naam} - Prognose GR 2026</h2>
+                 <p className="text-xs md:text-sm text-muted-foreground mt-1">
+                   Data: TK2025 vs TK2023 Swing
                  </p>
               </div>
 
               <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
-                 <table className="w-full text-left text-sm">
-                   <thead className="bg-slate-50 border-b">
-                     <tr>
-                        <th className="py-3 px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] w-8">#</th>
-                        <th className="py-3 px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px]">Partij</th>
-                        <th className="py-3 px-4 font-bold text-blue-600 uppercase tracking-tighter text-[10px] text-right bg-blue-50/30">GR 2022</th>
-                        <th className="py-3 px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right">TK 2023</th>
-                        <th className="py-3 px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right border-r">TK 2025</th>
-                        <th className="py-3 px-4 font-bold text-blue-600 uppercase tracking-tighter text-[10px] text-right bg-blue-50/30">Prog. 2026</th>
-                        <th className="py-3 px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right">Zetels '26</th>
-                        <th className="py-3 px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right w-16">+/-</th>
-                     </tr>
-                   </thead>
-                   <tbody>
-                     {prognose.partijen.map((p, i) => {
-                       const original = selectedGemeente.partijen.find(op => op.id === p.id);
-                       const originalZetels = original?.zetels || 0;
-                       const diff = p.zetels - originalZetels;
-                       const fp = (prognose as any).forecastedPartijen.find((fpAny: any) => fpAny.id === p.id);
-                       const swing = fp?.swing ?? 1.0;
+                 <div className="overflow-x-auto">
+                   <table className="w-full text-left text-sm min-w-[600px] md:min-w-0">
+                     <thead className="bg-slate-50 border-b">
+                       <tr>
+                          <th className="py-3 px-2 md:px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] w-8">#</th>
+                          <th className="py-3 px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px]">Partij</th>
+                          <th className="py-3 px-2 md:px-4 font-bold text-blue-600 uppercase tracking-tighter text-[10px] text-right bg-blue-50/30">GR 2022</th>
+                          <th className="py-3 px-2 md:px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right hidden sm:table-cell">TK 2023</th>
+                          <th className="py-3 px-2 md:px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right border-r hidden sm:table-cell">TK 2025</th>
+                          <th className="py-3 px-2 md:px-4 font-bold text-blue-600 uppercase tracking-tighter text-[10px] text-right bg-blue-50/30">Prog. 2026</th>
+                          <th className="py-3 px-2 md:px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right w-16 md:w-24">Zetels</th>
+                          <th className="py-3 px-2 md:px-4 font-bold text-slate-500 uppercase tracking-tighter text-[10px] text-right w-12 md:w-16">+/-</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       {prognose.partijen.map((p, i) => {
+                         const original = selectedGemeente.partijen.find(op => op.id === p.id);
+                         const originalZetels = original?.zetels || 0;
+                         const diff = p.zetels - originalZetels;
+                         const fp = (prognose as any).forecastedPartijen.find((fpAny: any) => fpAny.id === p.id);
+                         const swing = fp?.swing ?? 1.0;
 
-                       return (
-                         <tr key={p.id} className="border-b last:border-0 hover:bg-muted/10 transition-colors">
-                           <td className="py-3 px-4 text-muted-foreground font-mono text-[10px]">{i + 1}</td>
-                           <td className="py-3 px-4">
-                              <div className="flex items-center gap-3">
-                                <PartyLogo naam={p.naam} size={24} fallbackColor={getPartyColor(p.naam)} />
-                                <div className="flex flex-col">
-                                   <span className="font-bold text-slate-900 leading-tight">{p.naam}</span>
-                                   <span className="text-[10px] text-muted-foreground">Huidig: {originalZetels} zetel{originalZetels !== 1 ? 's' : ''}</span>
+                         return (
+                           <tr key={p.id} className="border-b last:border-0 hover:bg-muted/10 transition-colors">
+                             <td className="py-3 px-2 md:px-4 text-muted-foreground font-mono text-[10px]">{i + 1}</td>
+                             <td className="py-3 px-4">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                   <div className="flex-shrink-0 w-5 h-5 md:w-6 md:h-6">
+                                     <PartyLogo naam={p.naam} size={20} fallbackColor={getPartyColor(p.naam)} />
+                                   </div>
+                                   <div className="flex flex-col min-w-0">
+                                      <span className="font-bold text-slate-900 leading-tight truncate">{p.naam}</span>
+                                      <span className="text-[9px] md:text-[10px] text-muted-foreground">Huidig: {originalZetels}</span>
+                                   </div>
+                                 </div>
+                             </td>
+                             <td className="py-3 px-2 md:px-4 text-right tabular-nums bg-blue-50/10 text-xs md:text-sm">
+                                <div className="font-medium text-slate-900">{original?.stemmen.toLocaleString('nl-NL')}</div>
+                             </td>
+                             <td className="py-3 px-2 md:px-4 text-right tabular-nums text-slate-500 text-xs hidden sm:table-cell">
+                                {fp?.tk23Votes > 0 ? fp.tk23Votes.toLocaleString('nl-NL') : '-'}
+                             </td>
+                             <td className="py-3 px-2 md:px-4 text-right tabular-nums border-r text-xs hidden sm:table-cell">
+                                <div className="font-medium text-slate-900">{fp?.tk25Votes > 0 ? fp.tk25Votes.toLocaleString('nl-NL') : '-'}</div>
+                                {swing !== 1.0 && (
+                                  <div className={`text-[8px] md:text-[9px] font-bold ${swing > 1 ? 'text-green-600' : 'text-red-500'}`}>
+                                    {swing > 1 ? '▲' : '▼'} {Math.abs((swing - 1) * 100).toFixed(1)}%
+                                  </div>
+                                )}
+                             </td>
+                             <td className="py-3 px-2 md:px-4 text-right tabular-nums bg-blue-50/20 text-xs md:text-sm">
+                                <div className="font-bold text-blue-700">{p.stemmen.toLocaleString('nl-NL')}</div>
+                                <div className="sm:hidden block">
+                                   {swing !== 1.0 && (
+                                    <span className={`text-[8px] font-bold ${swing > 1 ? 'text-green-600' : 'text-red-500'}`}>
+                                      {swing > 1 ? '+' : ''}{((swing - 1) * 100).toFixed(0)}%
+                                    </span>
+                                  )}
                                 </div>
-                              </div>
-                           </td>
-                           <td className="py-3 px-4 text-right tabular-nums bg-blue-50/10">
-                              <div className="font-medium text-slate-900">{original?.stemmen.toLocaleString('nl-NL')}</div>
-                           </td>
-                           <td className="py-3 px-4 text-right tabular-nums text-slate-500">
-                              {fp?.tk23Votes > 0 ? fp.tk23Votes.toLocaleString('nl-NL') : '-'}
-                           </td>
-                           <td className="py-3 px-4 text-right tabular-nums border-r">
-                              <div className="font-medium text-slate-900">{fp?.tk25Votes > 0 ? fp.tk25Votes.toLocaleString('nl-NL') : '-'}</div>
-                              {swing !== 1.0 && (
-                                <div className={`text-[9px] font-bold ${swing > 1 ? 'text-green-600' : 'text-red-500'}`}>
-                                  {swing > 1 ? '▲' : '▼'} {Math.abs((swing - 1) * 100).toFixed(1)}%
-                                </div>
-                              )}
-                           </td>
-                           <td className="py-3 px-4 text-right tabular-nums bg-blue-50/20">
-                              <div className="font-bold text-blue-700">{p.stemmen.toLocaleString('nl-NL')}</div>
-                           </td>
-                           <td className="py-3 px-4 text-right">
-                              <div className="text-base font-black text-slate-900 leading-none">{p.zetels}</div>
-                              <div className="text-[9px] font-medium text-muted-foreground mt-1">({p.volleZetels} + {p.restZetels})</div>
-                           </td>
-                           <td className="py-3 px-4 text-right">
-                              {diff > 0 ? (
-                                <div className="inline-flex items-center justify-center bg-green-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded min-w-[24px]">+{diff}</div>
-                              ) : diff < 0 ? (
-                                <div className="inline-flex items-center justify-center bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded min-w-[24px]">{diff}</div>
-                              ) : (
-                                <span className="text-slate-300 font-bold text-xs">-</span>
-                              )}
-                           </td>
-                         </tr>
-                       );
-                     })}
-                   </tbody>
-                 </table>
+                             </td>
+                             <td className="py-3 px-2 md:px-4 text-right">
+                                <div className="text-sm md:text-base font-black text-slate-900 leading-none">{p.zetels}</div>
+                                <div className="text-[8px] md:text-[9px] font-medium text-muted-foreground mt-1">({p.volleZetels}+{p.restZetels})</div>
+                             </td>
+                             <td className="py-3 px-2 md:px-4 text-right">
+                                {diff > 0 ? (
+                                  <div className="inline-flex items-center justify-center bg-green-500 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded min-w-[20px] md:min-w-[24px]">+{diff}</div>
+                                ) : diff < 0 ? (
+                                  <div className="inline-flex items-center justify-center bg-red-500 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded min-w-[20px] md:min-w-[24px]">{diff}</div>
+                                ) : (
+                                  <span className="text-slate-300 font-bold text-xs">-</span>
+                                )}
+                             </td>
+                           </tr>
+                         );
+                       })}
+                     </tbody>
+                   </table>
+                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
