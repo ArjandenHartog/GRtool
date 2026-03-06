@@ -20,6 +20,15 @@ const parser = new XMLParser({
 
 const cache = new Map<string, Gemeente[]>();
 
+function fixPartyName(gemeenteNaam: string, jaar: string, partijNaam: string): string {
+  if (jaar === '2022') {
+    if (gemeenteNaam === 'Rotterdam' && partijNaam === 'ChristenUnie') {
+      return 'ChristenUnie-SGP';
+    }
+  }
+  return partijNaam;
+}
+
 function getAllGemeenten(jaar: string = '2022'): Gemeente[] {
   if (cache.has(jaar)) return cache.get(jaar)!;
 
@@ -39,7 +48,7 @@ function getAllGemeenten(jaar: string = '2022'): Gemeente[] {
   const gemeenten: Gemeente[] = [];
   for (const file of files) {
     try {
-      const gemeente = parseFile(path.join(dataDir, file));
+      const gemeente = parseFile(path.join(dataDir, file), jaar);
       if (gemeente) gemeenten.push(gemeente);
     } catch (e) {
       console.error(`Fout bij parsen van ${file}:`, e);
@@ -51,7 +60,7 @@ function getAllGemeenten(jaar: string = '2022'): Gemeente[] {
   return gemeenten;
 }
 
-function parseFile(filePath: string): Gemeente | null {
+function parseFile(filePath: string, jaar: string): Gemeente | null {
   const xml = fs.readFileSync(filePath, 'utf-8');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const doc: any = parser.parse(xml);
@@ -80,7 +89,9 @@ function parseFile(filePath: string): Gemeente | null {
   for (const sel of selections as any[]) {
     if (sel.AffiliationIdentifier) {
       currentPartijId = String(sel.AffiliationIdentifier['@_Id'] ?? '');
-      const partijNaam = String(sel.AffiliationIdentifier.RegisteredName ?? '');
+      const rawName = String(sel.AffiliationIdentifier.RegisteredName ?? '');
+      const partijNaam = fixPartyName(naam, jaar, rawName);
+      
       if (!partijen.has(currentPartijId)) {
         partijen.set(currentPartijId, {
           id: currentPartijId,
@@ -164,13 +175,18 @@ function parseFile(filePath: string): Gemeente | null {
         for (const sel of selections) {
           if (sel.AffiliationIdentifier) {
             const pid = String(sel.AffiliationIdentifier['@_Id'] ?? '');
+            const rawName = String(sel.AffiliationIdentifier.RegisteredName ?? '');
+            const partijNaam = fixPartyName(naam, jaar, rawName);
+
             if (partijen.has(pid)) {
               partijen.get(pid)!.stemmen = Number(sel.ValidVotes) || 0;
+              // Update name if it was generic before
+              partijen.get(pid)!.naam = partijNaam;
             } else {
               // Ook partijen die niet verkozen zijn maar wel stemmen kregen meenemen
               partijen.set(pid, {
                 id: pid,
-                naam: String(sel.AffiliationIdentifier.RegisteredName ?? ''),
+                naam: partijNaam,
                 stemmen: Number(sel.ValidVotes) || 0,
                 zetels: 0,
                 volleZetels: 0,
