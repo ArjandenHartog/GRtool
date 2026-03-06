@@ -8,6 +8,7 @@ export interface Kandidaat {
   initialen: string;
   geslacht?: string;
   ranking: number;
+  woonplaats?: string;
 }
 
 export interface Partij {

@@ -131,6 +131,9 @@ function parseFile(filePath: string): Gemeente | null {
       if (ranking === 1) partij.volleZetels++;
       else partij.restZetels++;
 
+      const localityName = sel.Candidate?.QualifyingAddress?.['xal:Locality']?.['xal:LocalityName'];
+      const woonplaats = localityName ? String(localityName) : undefined;
+
       partij.kandidaten.push({
         naam: volleNaam || achternaam || initialen,
         voornaam,
@@ -138,6 +141,7 @@ function parseFile(filePath: string): Gemeente | null {
         initialen,
         geslacht: String(sel.Candidate.Gender ?? '') || undefined,
         ranking,
+        woonplaats,
       });
     }
   }

@@ -1,12 +1,19 @@
 'use client';
 
-import { Gemeente, Partij } from '@/lib/types';
+import { Gemeente, Partij, Jaar } from '@/lib/types';
 import { getPartyColor } from '@/lib/partijKleuren';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
+const JAAR_DATUM: Record<Jaar, string> = {
+  '2022': '16 mrt 2022',
+  '2018': '21 mrt 2018',
+  '2014': '19 mrt 2014',
+};
+
 interface Props {
   gemeente: Gemeente;
+  jaar: Jaar;
   onClear: () => void;
 }
 
@@ -20,7 +27,7 @@ function StatCard({ label, value, sub }: { label: string; value: string | number
   );
 }
 
-export default function GemeentePanel({ gemeente, onClear }: Props) {
+export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
   const aantalVrouwen = gemeente.partijen
     .flatMap((p) => p.kandidaten)
     .filter((k) => k.geslacht === 'female').length;
@@ -36,7 +43,7 @@ export default function GemeentePanel({ gemeente, onClear }: Props) {
         <div>
           <h2 className="text-base font-bold leading-tight">{gemeente.naam}</h2>
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            CBS {gemeente.cbsCodeFormatted} &bull; 16 maart 2022
+            CBS {gemeente.cbsCodeFormatted} &bull; {JAAR_DATUM[jaar]}
           </p>
         </div>
         <button
@@ -224,8 +231,13 @@ export default function GemeentePanel({ gemeente, onClear }: Props) {
                       </span>
                       {k.geslacht === 'female' && <span className="text-pink-400 text-[10px]">v</span>}
                       {k.geslacht === 'male' && <span className="text-blue-400 text-[10px]">m</span>}
+                      {k.woonplaats && (
+                        <span className="ml-auto text-[10px] text-muted-foreground/60 truncate max-w-[80px] flex-shrink-0" title={k.woonplaats}>
+                          {k.woonplaats}
+                        </span>
+                      )}
                       {k.ranking === 2 && (
-                        <span className="ml-auto text-[9px] text-orange-400 font-medium flex-shrink-0">rest</span>
+                        <span className="text-[9px] text-orange-400 font-medium flex-shrink-0">rest</span>
                       )}
                     </li>
                   ))}

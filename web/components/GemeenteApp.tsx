@@ -13,7 +13,6 @@ import {
   CommandGroup,
   CommandEmpty,
 } from '@/components/ui/command';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import GemeentePanel from './GemeentePanel';
@@ -62,12 +61,8 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
 
   const isSearching = query.trim().length > 0;
 
-  console.log('[render] selected:', selected?.naam ?? 'null', '| gemeenten:', gemeenten.length);
-
   function handleSelect(naam: string) {
-    console.log('[handleSelect] naam:', naam, '| gemeenten.length:', gemeenten.length);
     const g = gemeenten.find((g) => g.naam === naam) ?? null;
-    console.log('[handleSelect] gevonden gemeente:', g?.naam ?? 'NIET GEVONDEN');
     setSelected(g);
     setQuery('');
   }
@@ -131,7 +126,7 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
         <aside className="w-80 flex-shrink-0 flex flex-col border-r bg-background overflow-hidden">
 
           {/* Zoekbalk */}
-          <Command shouldFilter={false} className="rounded-none border-0 shadow-none flex-shrink-0">
+          <Command shouldFilter={false} className="rounded-none border-0 shadow-none flex-shrink-0 h-auto">
             <CommandInput
               placeholder="Zoek gemeente…"
               value={query}
@@ -176,9 +171,9 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
           {/* Detail of lege staat */}
           <div className="flex-1 overflow-hidden flex flex-col min-h-0">
             {selected ? (
-              <ScrollArea className="flex-1">
-                <GemeentePanel gemeente={selected} onClear={handleClear} />
-              </ScrollArea>
+              <div className="flex-1 overflow-y-auto h-full">
+                <GemeentePanel gemeente={selected} jaar={jaar} onClear={handleClear} />
+              </div>
             ) : (
               <div className="flex flex-col items-center justify-center flex-1 gap-4 p-8 text-center">
                 <svg className="w-14 h-14 text-muted-foreground/15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,4 +204,11 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
           <NlKaart
             key={jaar}
             gemeenten={gemeenten}
-            selected={selected?.naam ?? null
+            selected={selected?.naam ?? null}
+            onSelect={handleSelect}
+          />
+        </main>
+      </div>
+    </div>
+  );
+}
