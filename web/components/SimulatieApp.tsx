@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -30,6 +32,7 @@ function SimulatieContent({ gemeenten }: { gemeenten: Gemeente[] }) {
       const found = gemeenten.find(g => g.naam.toLowerCase() === gParam.toLowerCase());
       if (found) {
         setSelectedGemeente(found);
+        document.title = `${found.naam} - Simulator GR 2026`;
         const initialStemmen: Record<string, number> = {};
         found.partijen.forEach((p) => {
           initialStemmen[p.id] = p.stemmen;
@@ -44,11 +47,14 @@ function SimulatieContent({ gemeenten }: { gemeenten: Gemeente[] }) {
     setSelectedGemeente(g);
     
     if (g) {
+      document.title = `${g.naam} - Simulator GR 2026`;
       const initialStemmen: Record<string, number> = {};
       g.partijen.forEach((p) => {
         initialStemmen[p.id] = p.stemmen;
       });
       setStemmenInput(initialStemmen);
+    } else {
+      document.title = 'Simulator Gemeenteraadsverkiezingen 2026 - Uitslagenavond';
     }
 
     // Update URL

@@ -44,7 +44,10 @@ function PrognoseContent({ gemeenten }: { gemeenten: Gemeente[] }) {
       const gParam = searchParams.get('g');
       if (gParam) {
         const found = gemeenten.find(g => g.naam.toLowerCase() === gParam.toLowerCase());
-        if (found) setSelectedGemeente(found);
+        if (found) {
+          setSelectedGemeente(found);
+          document.title = `${found.naam} - Prognose GR 2026`;
+        }
       }
       
       setLoading(false);
@@ -54,6 +57,11 @@ function PrognoseContent({ gemeenten }: { gemeenten: Gemeente[] }) {
   const handleSelect = (gemeenteNaam: string) => {
     const g = gemeenten.find((g) => g.naam === gemeenteNaam) || null;
     setSelectedGemeente(g);
+    if (g) {
+      document.title = `${g.naam} - Prognose GR 2026`;
+    } else {
+      document.title = 'Prognose Gemeenteraadsverkiezingen 2026 - Uitslagenavond';
+    }
     
     // Update URL
     const params = new URLSearchParams(searchParams.toString());
