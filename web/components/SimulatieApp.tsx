@@ -1,7 +1,6 @@
-'use client';
-
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Gemeente, Partij } from '@/lib/types';
 import { berekenZetels } from '@/lib/zetelVerdeling';
 import { getPartyColor } from '@/lib/partijKleuren';
@@ -15,23 +14,51 @@ import {
 } from '@/components/ui/command';
 import PartyLogo from './PartyLogo';
 
-export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
+function SimulatieContent({ gemeenten }: { gemeenten: Gemeente[] }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   const [selectedGemeente, setSelectedGemeente] = useState<Gemeente | null>(null);
   const [stemmenInput, setStemmenInput] = useState<Record<string, number>>({});
   const [query, setQuery] = useState('');
 
+  // Initial load and URL sync
+  useEffect(() => {
+    const gParam = searchParams.get('g');
+    if (gParam) {
+      const found = gemeenten.find(g => g.naam.toLowerCase() === gParam.toLowerCase());
+      if (found) {
+        setSelectedGemeente(found);
+        const initialStemmen: Record<string, number> = {};
+        found.partijen.forEach((p) => {
+          initialStemmen[p.id] = p.stemmen;
+        });
+        setStemmenInput(initialStemmen);
+      }
+    }
+  }, [gemeenten, searchParams]);
+
   const handleSelect = (gemeenteNaam: string) => {
-    const g = gemeenten.find((g) => g.naam === gemeenteNaam);
-    if (!g) return;
-    
+    const g = gemeenten.find((g) => g.naam === gemeenteNaam) || null;
     setSelectedGemeente(g);
     
-    // Initialize with 2022 votes as fallback
-    const initialStemmen: Record<string, number> = {};
-    g.partijen.forEach((p) => {
-      initialStemmen[p.id] = p.stemmen;
-    });
-    setStemmenInput(initialStemmen);
+    if (g) {
+      const initialStemmen: Record<string, number> = {};
+      g.partijen.forEach((p) => {
+        initialStemmen[p.id] = p.stemmen;
+      });
+      setStemmenInput(initialStemmen);
+    }
+
+    // Update URL
+    const params = new URLSearchParams(searchParams.toString());
+    if (g) {
+      params.set('g', g.naam);
+    } else {
+      params.delete('g');
+    }
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const handleChange = (id: string, value: string) => {
@@ -242,5 +269,13 @@ export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function SimulatieApp({ gemeenten }: { gemeenten: Gemeente[] }) {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Laden...</div>}>
+      <SimulatieContent gemeenten={gemeenten} />
+    </Suspense>
   );
 }
