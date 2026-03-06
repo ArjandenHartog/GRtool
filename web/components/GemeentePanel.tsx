@@ -4,6 +4,7 @@ import { Gemeente, Partij, Jaar } from '@/lib/types';
 import { getPartyColor } from '@/lib/partijKleuren';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import PartyLogo from './PartyLogo';
 
 const JAAR_DATUM: Record<Jaar, string> = {
   '2022': '16 mrt 2022',
@@ -105,7 +106,7 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
             <div key={p.id} className="space-y-1">
               <div className="flex items-center justify-between gap-1.5">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: color }} />
+                  <PartyLogo naam={p.naam} size={18} fallbackColor={color} />
                   <span className="text-xs font-medium truncate" title={p.naam}>{p.naam}</span>
                   {p.isMakkelijkeZetel && (
                     <Badge variant="outline" className="text-[9px] px-1 py-0 h-3.5 border-orange-300 text-orange-500 bg-orange-50 flex-shrink-0">
@@ -171,7 +172,7 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
                 const kandidaat = partij.kandidaten[0];
                 return (
                   <div key={naam} className="flex items-center gap-2 rounded-md border border-orange-200 bg-orange-50 px-2.5 py-1.5">
-                    <span className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: color }} />
+                    <PartyLogo naam={naam} size={18} fallbackColor={color} />
                     <span className="text-xs font-medium flex-1 truncate">{naam}</span>
                     {kandidaat && (
                       <span className="text-[11px] text-muted-foreground truncate max-w-[100px]">
@@ -199,7 +200,7 @@ export default function GemeentePanel({ gemeente, jaar, onClear }: Props) {
             return (
               <details key={p.id} className="group">
                 <summary className="flex items-center gap-2 cursor-pointer list-none select-none rounded-md px-2 py-1.5 hover:bg-muted/50 transition-colors -mx-2">
-                  <span className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: color }} />
+                  <PartyLogo naam={p.naam} size={18} fallbackColor={color} />
                   <span className="text-xs font-medium flex-1 truncate" title={p.naam}>{p.naam}</span>
                   <div className="flex items-center gap-1 flex-shrink-0">
                     {p.volleZetels > 0 && (

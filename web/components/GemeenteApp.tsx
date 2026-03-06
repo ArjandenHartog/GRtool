@@ -17,6 +17,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import GemeentePanel from './GemeentePanel';
+import PartyLogo from './PartyLogo';
 
 const NlKaart = dynamic(() => import('./NlKaart'), {
   ssr: false,
@@ -190,7 +191,7 @@ export default function GemeenteApp({ gemeenten, jaar }: Props) {
                           className="flex items-center justify-between gap-2 cursor-pointer py-2.5"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <span className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: color }} />
+                            <PartyLogo naam={g.grootstePartij} size={18} fallbackColor={color} />
                             <span className="text-sm font-medium truncate">{g.naam}</span>
                           </div>
                           <div className="flex items-center gap-1.5 flex-shrink-0">

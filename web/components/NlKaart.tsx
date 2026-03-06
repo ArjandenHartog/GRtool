@@ -64,59 +64,79 @@ function styleFor(g: Gemeente | undefined, isSelected: boolean, config: MapConfi
 }
 
 function MapConfigPanel({ config, onChange }: { config: MapConfig; onChange: (c: MapConfig) => void }) {
+  const [open, setOpen] = useState(true);
+  useEffect(() => {
+    if (window.innerWidth < 768) setOpen(false);
+  }, []);
+
   return (
     <div
-      className="absolute top-3 right-3 z-[1000] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-lg shadow-md p-3 text-xs min-w-[175px]"
+      className="absolute top-3 right-3 z-[1000] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-lg shadow-md text-xs min-w-[160px]"
       onMouseDown={(e) => e.stopPropagation()}
       onWheel={(e) => e.stopPropagation()}
     >
-      <p className="font-semibold text-slate-500 mb-2 uppercase tracking-wide text-[10px]">Kaartopties</p>
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-3 py-2 font-semibold text-slate-500 uppercase tracking-wide text-[10px] hover:text-slate-800 transition-colors"
+      >
+        <span>Kaartopties</span>
+        <svg
+          className={`w-3 h-3 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
 
-      <p className="text-slate-500 mb-1 font-medium">Kleur op</p>
+      {open && (
+        <div className="px-3 pb-3 border-t border-slate-100">
+          <p className="text-slate-500 mt-2 mb-1 font-medium">Kleur op</p>
 
-      {(['partij', 'zetels', 'makkelijkeZetel'] as KleurModus[]).map((m) => (
-        <label key={m} className="flex items-center gap-2 py-0.5 cursor-pointer hover:text-slate-900">
-          <input
-            type="radio"
-            name="kleurModus"
-            value={m}
-            checked={config.kleurModus === m}
-            onChange={() => onChange({ ...config, kleurModus: m })}
-            className="accent-blue-600"
-          />
-          <span className="flex items-center gap-1">
-            {m === 'partij' && 'Grootste partij'}
-            {m === 'zetels' && 'Totaal zetels'}
-            {m === 'makkelijkeZetel' && (
-              <>
-                Makkelijke zetels
-                <span
-                  title="Een 'makkelijke zetel' is een zetel die een partij wint via de restzetelverdeling als enige zetel — de partij had niet genoeg stemmen voor een volle zetel maar krijgt er toch één via de restzetelregel. Gemeenten oranje = minstens één partij met zo'n zetel."
-                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-500 cursor-help text-[9px] font-bold leading-none flex-shrink-0"
-                >
-                  ?
-                </span>
-              </>
-            )}
-          </span>
-        </label>
-      ))}
+          {(['partij', 'zetels', 'makkelijkeZetel'] as KleurModus[]).map((m) => (
+            <label key={m} className="flex items-center gap-2 py-0.5 cursor-pointer hover:text-slate-900">
+              <input
+                type="radio"
+                name="kleurModus"
+                value={m}
+                checked={config.kleurModus === m}
+                onChange={() => onChange({ ...config, kleurModus: m })}
+                className="accent-blue-600"
+              />
+              <span className="flex items-center gap-1">
+                {m === 'partij' && 'Grootste partij'}
+                {m === 'zetels' && 'Totaal zetels'}
+                {m === 'makkelijkeZetel' && (
+                  <>
+                    Makkelijke zetels
+                    <span
+                      title="Een 'makkelijke zetel' is een zetel die een partij wint via de restzetelverdeling als enige zetel — de partij had niet genoeg stemmen voor een volle zetel maar krijgt er toch één via de restzetelregel. Gemeenten oranje = minstens één partij met zo'n zetel."
+                      className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-500 cursor-help text-[9px] font-bold leading-none flex-shrink-0"
+                    >
+                      ?
+                    </span>
+                  </>
+                )}
+              </span>
+            </label>
+          ))}
 
-      <hr className="my-2 border-slate-200" />
-      <p className="text-slate-500 mb-1 font-medium">Achtergrond</p>
-      {([['osm', 'OpenStreetMap'], ['carto-light', 'Licht (Carto)'], ['carto-dark', 'Donker (Carto)'], ['geen', 'Geen']] as [Achtergrond, string][]).map(([val, label]) => (
-        <label key={val} className="flex items-center gap-2 py-0.5 cursor-pointer hover:text-slate-900">
-          <input
-            type="radio"
-            name="achtergrond"
-            value={val}
-            checked={config.achtergrond === val}
-            onChange={() => onChange({ ...config, achtergrond: val })}
-            className="accent-blue-600"
-          />
-          {label}
-        </label>
-      ))}
+          <hr className="my-2 border-slate-200" />
+          <p className="text-slate-500 mb-1 font-medium">Achtergrond</p>
+          {([['osm', 'OpenStreetMap'], ['carto-light', 'Licht (Carto)'], ['carto-dark', 'Donker (Carto)'], ['geen', 'Geen']] as [Achtergrond, string][]).map(([val, label]) => (
+            <label key={val} className="flex items-center gap-2 py-0.5 cursor-pointer hover:text-slate-900">
+              <input
+                type="radio"
+                name="achtergrond"
+                value={val}
+                checked={config.achtergrond === val}
+                onChange={() => onChange({ ...config, achtergrond: val })}
+                className="accent-blue-600"
+              />
+              {label}
+            </label>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
