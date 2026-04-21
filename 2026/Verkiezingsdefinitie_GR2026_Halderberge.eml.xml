@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<EML xmlns:xnl="urn:oasis:names:tc:ciq:xsdschema:xNL:2.0" xmlns="urn:oasis:names:tc:evs:schema:eml" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0" xmlns:kr="http://www.kiesraad.nl/extensions" Id="110a" SchemaVersion="5">
+    <TransactionId>1</TransactionId>
+    <IssueDate>2026-02-06</IssueDate>
+    <kr:CreationDateTime>2026-02-06T10:42:57.227</kr:CreationDateTime>
+    <ElectionEvent>
+        <EventIdentifier/>
+        <Election>
+            <ElectionIdentifier Id="GR2026_Halderberge">
+                <ElectionName>Gemeenteraad Halderberge 2026</ElectionName>
+                <ElectionCategory>GR</ElectionCategory>
+                <kr:ElectionSubcategory>GR2</kr:ElectionSubcategory>
+                <kr:ElectionDomain Id="1655">Halderberge</kr:ElectionDomain>
+                <kr:ElectionDate>2026-03-18</kr:ElectionDate>
+                <kr:NominationDate>2026-02-02</kr:NominationDate>
+            </ElectionIdentifier>
+            <Contest>
+                <ContestIdentifier Id="geen"/>
+                <VotingMethod>SPV</VotingMethod>
+                <MaxVotes></MaxVotes>
+            </Contest>
+            <kr:NumberOfSeats>23</kr:NumberOfSeats>
+            <kr:PreferenceThreshold>25</kr:PreferenceThreshold>
+            <kr:ElectionTree>
+                <kr:Region RegionNumber="1655" RegionCategory="GEMEENTE">
+                    <kr:RegionName>Halderberge</kr:RegionName>
+                    <kr:Committee CommitteeCategory="CSB"/>
+                    <kr:Committee CommitteeCategory="HSB"/>
+                </kr:Region>
+            </kr:ElectionTree>
+            <kr:RegisteredParties>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>VVD</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>Lokaal Halderberge</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>WOS Halderberge</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>CDA</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>D66</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>GROENLINKS/ Partij van de Arbeid (PvdA)</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>Forum voor Democratie</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+            </kr:RegisteredParties>
+        </Election>
+    </ElectionEvent>
+</EML>

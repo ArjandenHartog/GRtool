@@ -3,8 +3,8 @@ import { Analytics } from "@vercel/analytics/react";
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'GR2022 - Gemeenteraadsverkiezingen Nederland',
-  description: 'Interactieve kaart met resultaten gemeenteraadsverkiezingen 2022',
+  title: 'GR2026 - Gemeenteraadsverkiezingen Nederland',
+  description: 'Interactieve kaart met resultaten gemeenteraadsverkiezingen 2026',
   icons: {
     icon: [
       { url: '/favicon.png' },

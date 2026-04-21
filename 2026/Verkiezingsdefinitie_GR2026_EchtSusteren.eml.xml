@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<EML xmlns:xnl="urn:oasis:names:tc:ciq:xsdschema:xNL:2.0" xmlns="urn:oasis:names:tc:evs:schema:eml" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0" xmlns:kr="http://www.kiesraad.nl/extensions" Id="110a" SchemaVersion="5">
+    <TransactionId>1</TransactionId>
+    <IssueDate>2026-02-06</IssueDate>
+    <kr:CreationDateTime>2026-02-06T13:05:11.734</kr:CreationDateTime>
+    <ElectionEvent>
+        <EventIdentifier/>
+        <Election>
+            <ElectionIdentifier Id="GR2026_EchtSusteren">
+                <ElectionName>Gemeenteraad Echt-Susteren 2026</ElectionName>
+                <ElectionCategory>GR</ElectionCategory>
+                <kr:ElectionSubcategory>GR2</kr:ElectionSubcategory>
+                <kr:ElectionDomain Id="1711">Echt-Susteren</kr:ElectionDomain>
+                <kr:ElectionDate>2026-03-18</kr:ElectionDate>
+                <kr:NominationDate>2026-02-02</kr:NominationDate>
+            </ElectionIdentifier>
+            <Contest>
+                <ContestIdentifier Id="geen"/>
+                <VotingMethod>SPV</VotingMethod>
+                <MaxVotes></MaxVotes>
+            </Contest>
+            <kr:NumberOfSeats>23</kr:NumberOfSeats>
+            <kr:PreferenceThreshold>25</kr:PreferenceThreshold>
+            <kr:ElectionTree>
+                <kr:Region RegionNumber="1711" RegionCategory="GEMEENTE">
+                    <kr:RegionName>Echt-Susteren</kr:RegionName>
+                    <kr:Committee CommitteeCategory="CSB"/>
+                    <kr:Committee CommitteeCategory="HSB"/>
+                </kr:Region>
+            </kr:ElectionTree>
+            <kr:RegisteredParties>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>Partij Nieuw Echt-Susteren</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>Lijst Samenwerking</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>CDA</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>Democraten Echt-Susteren</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>GROENLINKS / Partij van de Arbeid (PvdA)</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+            </kr:RegisteredParties>
+        </Election>
+    </ElectionEvent>
+</EML>

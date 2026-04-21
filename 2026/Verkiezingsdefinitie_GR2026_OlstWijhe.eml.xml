@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<EML xmlns:xnl="urn:oasis:names:tc:ciq:xsdschema:xNL:2.0" xmlns="urn:oasis:names:tc:evs:schema:eml" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0" xmlns:kr="http://www.kiesraad.nl/extensions" Id="110a" SchemaVersion="5">
+    <TransactionId>1</TransactionId>
+    <IssueDate>2026-02-12</IssueDate>
+    <kr:CreationDateTime>2026-02-12T14:37:58.535</kr:CreationDateTime>
+    <ElectionEvent>
+        <EventIdentifier/>
+        <Election>
+            <ElectionIdentifier Id="GR2026_OlstWijhe">
+                <ElectionName>Gemeenteraad Olst-Wijhe 2026</ElectionName>
+                <ElectionCategory>GR</ElectionCategory>
+                <kr:ElectionSubcategory>GR1</kr:ElectionSubcategory>
+                <kr:ElectionDomain Id="1773">Olst-Wijhe</kr:ElectionDomain>
+                <kr:ElectionDate>2026-03-18</kr:ElectionDate>
+                <kr:NominationDate>2026-02-02</kr:NominationDate>
+            </ElectionIdentifier>
+            <Contest>
+                <ContestIdentifier Id="geen"/>
+                <VotingMethod>SPV</VotingMethod>
+                <MaxVotes></MaxVotes>
+            </Contest>
+            <kr:NumberOfSeats>17</kr:NumberOfSeats>
+            <kr:PreferenceThreshold>50</kr:PreferenceThreshold>
+            <kr:ElectionTree>
+                <kr:Region RegionNumber="1773" RegionCategory="GEMEENTE">
+                    <kr:RegionName>Olst-Wijhe</kr:RegionName>
+                    <kr:Committee CommitteeCategory="CSB"/>
+                    <kr:Committee CommitteeCategory="HSB"/>
+                </kr:Region>
+            </kr:ElectionTree>
+            <kr:RegisteredParties>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>GROENLINKS / Partij van de Arbeid (PvdA) / D66</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>Gemeentebelangen Olst-Wijhe</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>CDA</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+                <kr:RegisteredParty>
+                    <kr:RegisteredAppellation>VVD</kr:RegisteredAppellation>
+                </kr:RegisteredParty>
+            </kr:RegisteredParties>
+        </Election>
+    </ElectionEvent>
+</EML>

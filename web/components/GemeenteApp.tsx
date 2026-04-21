@@ -42,6 +42,7 @@ const LEGEND = [
 ];
 
 const JAAR_DATUM: Record<string, string> = {
+  '2026': '18 mrt 2026',
   '2022': '16 mrt 2022',
   '2018': '21 mrt 2018',
   '2014': '19 mrt 2014',

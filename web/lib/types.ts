@@ -1,4 +1,4 @@
-export const BESCHIKBARE_JAREN = ['2022', '2018', '2014'] as const;
+export const BESCHIKBARE_JAREN = ['2026', '2022', '2018', '2014'] as const;
 export type Jaar = (typeof BESCHIKBARE_JAREN)[number];
 
 export interface Kandidaat {

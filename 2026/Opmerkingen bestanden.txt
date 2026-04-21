@@ -1,0 +1,30 @@
+#########################################################################
+#
+# Herstemming in Gorinchem
+#
+#########################################################################
+In Gorinchem wordt op woensdag 29 april 2026 een herstemming gehouden. Daarom zijn de volgende bestanden van Gorinchem weggelaten uit deze publicatie. Nadat de uitslag van de herstemming definitief is en de bestanden met de Kiesraad gedeeld zijn, zullen deze toegevoegd worden aan deze publicatie:
+
+- Telling_GR2026_Gorinchem.eml.xml
+- Totaaltelling_GR2026_Gorinchem.eml.xml
+- Resultaat_GR2026_Gorinchem.eml.xml
+
+
+#########################################################################
+#
+# Verschillen EML-bestanden op GSB- en CSB-niveau
+#
+#########################################################################
+Bij deze gemeenteraadsverkiezingen zijn de gemeentes zowel GSB als eigen CSB. In principe moeten de aantallen tussen het GSB en het CSB tellingsbestand overeenkomen. Bij een aantal gemeenten was er een verschil tussen het digitale bestand van het GSB en het CSB. Dit komt doordat deze gemeenten de gecorrigeerde bestanden op GSB niet hebben gedeeld met de Kiesraad. De betreffende verschillen zijn hieronder terug te vinden:
+
+- In Doetinchem is meer getelde stembiljetten niet gelijk. Waarde was 3 maar is overgenomen als 0
+- In Doetinchem is minder getelde stembiljetten niet gelijk. Waarde was 3 maar is overgenomen als 0
+- In Zoeterwoude is ongeldig niet gelijk. Waarde was 6 maar is overgenomen als 7
+
+
+#########################################################################
+#
+# Hernoemd bestand
+#
+#########################################################################
+Het bestand 'Telling_GR2026_'s-Hertogenbosch.eml.xml' is door de Kiesraad hernoemd naar 'Telling_GR2026_sHertogenbosch.eml.xml om consistent te zijn met de andere bestanden. De inhoud van het bestand is nog exact hetzelfde zoals gemeente 's-Hertogenbosch deze met de Kiesraad heeft gedeeld.

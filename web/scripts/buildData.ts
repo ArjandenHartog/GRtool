@@ -325,7 +325,7 @@ function parseFile(filePath: string, jaar: string): Gemeente | null {
 }
 
 // Generate data
-const BESCHIKBARE_JAREN = ['2022', '2018', '2014'];
+const BESCHIKBARE_JAREN = ['2026', '2022', '2018', '2014'];
 
 console.log('Generating JSON data from XML...');
 if (!fs.existsSync(OUT_DIR)) {
